@@ -60,7 +60,19 @@ style="position:absolute; top:20px; left:20px; z-index:999; padding:10px;">
 
            color="red" visible="false"></a-box> 
 
- 
+<a-text id="label" 
+
+        value="" 
+
+        position="0 2.3 0" 
+
+        align="center" 
+
+        color="yellow" 
+
+        visible="true"> 
+
+</a-text>  
 
   </a-marker> 
 
@@ -88,17 +100,23 @@ function nextStep() {
 
     document.querySelector("#body").setAttribute("visible", true); 
 
+    document.querySelector("#label").setAttribute("value", "Step1: 胴体"); 
+
   } 
 
   if (step === 2) { 
 
     document.querySelector("#waist").setAttribute("visible", true); 
 
+    document.querySelector("#label").setAttribute("value", "Step2: 腰パーツ"); 
+
   } 
 
   if (step === 3) { 
 
     document.querySelector("#head").setAttribute("visible", true); 
+
+    document.querySelector("#label").setAttribute("value", "Step3: 頭部"); 
 
   } 
 
@@ -111,3 +129,4 @@ function nextStep() {
 </body> 
 
 </html>
+
