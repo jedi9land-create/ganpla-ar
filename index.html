@@ -42,7 +42,7 @@ style="position:absolute; top:60px; left:20px; z-index:999; padding:10px;">
 
 style="position:absolute; top:110px; left:20px; z-index:999; 
 
-color:white; font-size:18px; background:black; padding:10px;"> 
+color:white; font-size:16px; background:black; padding:10px;"> 
 
 組み立てスタート 
 
@@ -50,49 +50,71 @@ color:white; font-size:18px; background:black; padding:10px;">
 
  
 
-<a-scene embedded arjs> 
+<a-scene embedded arjs renderer="physicallyCorrectLights: true"> 
+
+ 
+
+<a-light type="directional" position="2 4 2" intensity="1"></a-light> 
+
+<a-light type="ambient" intensity="0.6"></a-light> 
+
+ 
 
 <a-marker preset="hiro"> 
 
  
 
-<a-entity id="gundam"> 
+<a-entity id="gundam" rotation="0 0 0" scale="1 1 1"> 
 
  
 
-<!-- 胴体 --> 
+<!-- 点滅ガイド --> 
+
+<a-box id="guide" 
+
+depth="0.4" height="0.8" width="0.6" 
+
+color="lime" 
+
+opacity="0.3" 
+
+transparent="true" 
+
+visible="false" 
+
+animation="property: opacity; dir: alternate; dur: 500; loop: true; to: 0.1"> 
+
+</a-box> 
+
+ 
+
+<!-- パーツ --> 
 
 <a-box id="body" position="0 3 0" 
 
 depth="0.4" height="0.8" width="0.6" 
 
-color="blue" visible="false"></a-box> 
+color="#1f3c88" visible="false"></a-box> 
 
  
-
-<!-- 腰 --> 
 
 <a-box id="waist" position="0 3 0" 
 
 depth="0.4" height="0.3" width="0.7" 
 
-color="red" visible="false"></a-box> 
+color="#b11226" visible="false"></a-box> 
 
  
-
-<!-- 頭 --> 
 
 <a-box id="head" position="0 3 0" 
 
 depth="0.4" height="0.4" width="0.4" 
 
-color="white" visible="false"></a-box> 
+color="#e6e6e6" visible="false"></a-box> 
 
  
 
-<!-- 目 --> 
-
-<a-box id="eye" position="0 1.6 0.21" 
+<a-box id="eye" position="0 3 0" 
 
 depth="0.05" height="0.1" width="0.3" 
 
@@ -100,35 +122,11 @@ color="black" visible="false"></a-box>
 
  
 
-<!-- ツノ --> 
-
-<a-box id="hornL" position="-0.15 3 0" 
-
-depth="0.05" height="0.4" width="0.05" 
-
-rotation="0 0 20" 
-
-color="yellow" visible="false"></a-box> 
-
- 
-
-<a-box id="hornR" position="0.15 3 0" 
-
-depth="0.05" height="0.4" width="0.05" 
-
-rotation="0 0 -20" 
-
-color="yellow" visible="false"></a-box> 
-
- 
-
-<!-- 腕 --> 
-
 <a-box id="leftArm" position="0 3 0" 
 
 depth="0.3" height="0.7" width="0.3" 
 
-color="white" visible="false"></a-box> 
+color="#e6e6e6" visible="false"></a-box> 
 
  
 
@@ -136,17 +134,15 @@ color="white" visible="false"></a-box>
 
 depth="0.3" height="0.7" width="0.3" 
 
-color="white" visible="false"></a-box> 
+color="#e6e6e6" visible="false"></a-box> 
 
  
-
-<!-- 脚 --> 
 
 <a-box id="leftLeg" position="0 3 0" 
 
 depth="0.3" height="1" width="0.3" 
 
-color="gray" visible="false"></a-box> 
+color="#333333" visible="false"></a-box> 
 
  
 
@@ -154,27 +150,7 @@ color="gray" visible="false"></a-box>
 
 depth="0.3" height="1" width="0.3" 
 
-color="gray" visible="false"></a-box> 
-
- 
-
-<!-- ライフル --> 
-
-<a-box id="rifle" position="0 3 0" 
-
-depth="0.2" height="0.2" width="0.8" 
-
-color="black" visible="false"></a-box> 
-
- 
-
-<!-- シールド --> 
-
-<a-box id="shield" position="0 3 0" 
-
-depth="0.1" height="0.8" width="0.6" 
-
-color="red" visible="false"></a-box> 
+color="#333333" visible="false"></a-box> 
 
  
 
@@ -194,9 +170,45 @@ color="red" visible="false"></a-box>
 
 let step = 0; 
 
+const totalSteps = 7; 
+
  
 
-function animatePart(id, x, y) { 
+function updateProgress(){ 
+
+let percent = Math.floor((step/totalSteps)*100); 
+
+document.querySelector("#labelUI").innerText = 
+
+"ステップ "+step+"/"+totalSteps+" | 完成度 "+percent+"%"; 
+
+} 
+
+ 
+
+function showGuide(x,y,h){ 
+
+const g = document.querySelector("#guide"); 
+
+g.setAttribute("position",x+" "+y+" 0"); 
+
+g.setAttribute("height",h); 
+
+g.setAttribute("visible",true); 
+
+} 
+
+ 
+
+function hideGuide(){ 
+
+document.querySelector("#guide").setAttribute("visible",false); 
+
+} 
+
+ 
+
+function animatePart(id, x, y){ 
 
 const part = document.querySelector(id); 
 
@@ -204,7 +216,7 @@ part.setAttribute("visible", true);
 
 part.setAttribute("animation", 
 
-"property: position; to: " + x + " " + y + " 0; dur: 800; easing: easeOutQuad;"); 
+"property: position; to: "+x+" "+y+" 0; dur: 800; easing: easeOutQuad;"); 
 
 } 
 
@@ -216,29 +228,71 @@ step++;
 
  
 
-if(step===1){animatePart("#body",0,1);label("胴体");} 
+if(step===1){ 
 
-else if(step===2){animatePart("#waist",0,0.6);label("腰");} 
+showGuide(0,1,0.8); 
 
-else if(step===3){animatePart("#head",0,1.6);label("頭部");} 
+setTimeout(()=>{ hideGuide(); animatePart("#body",0,1); updateProgress(); },800); 
 
-else if(step===4){animatePart("#hornL",-0.15,1.9);animatePart("#hornR",0.15,1.9);label("Vアンテナ");} 
+} 
 
-else if(step===5){animatePart("#eye",0,1.6);document.querySelector("#eye").setAttribute("color","lime");label("目点灯");} 
+else if(step===2){ 
 
-else if(step===6){animatePart("#leftArm",-0.6,1.1);animatePart("#rightArm",0.6,1.1);label("腕");} 
+showGuide(0,0.6,0.3); 
 
-else if(step===7){animatePart("#leftLeg",-0.2,0);animatePart("#rightLeg",0.2,0);label("脚");} 
+setTimeout(()=>{ hideGuide(); animatePart("#waist",0,0.6); updateProgress(); },800); 
 
-else if(step===8){animatePart("#rifle",0.9,1.1);animatePart("#shield",-1,1.1);label("武装装備");} 
+} 
 
-else if(step===9){ 
+else if(step===3){ 
 
-label("完成！"); 
+showGuide(0,1.6,0.4); 
+
+setTimeout(()=>{ hideGuide(); animatePart("#head",0,1.6); updateProgress(); },800); 
+
+} 
+
+else if(step===4){ 
+
+showGuide(0,1.6,0.1); 
+
+setTimeout(()=>{ hideGuide(); animatePart("#eye",0,1.6); 
+
+document.querySelector("#eye").setAttribute("color","lime"); 
+
+updateProgress(); },800); 
+
+} 
+
+else if(step===5){ 
+
+showGuide(-0.6,1.1,0.7); 
+
+setTimeout(()=>{ hideGuide(); animatePart("#leftArm",-0.6,1.1); 
+
+animatePart("#rightArm",0.6,1.1); updateProgress(); },800); 
+
+} 
+
+else if(step===6){ 
+
+showGuide(-0.2,0,1); 
+
+setTimeout(()=>{ hideGuide(); animatePart("#leftLeg",-0.2,0); 
+
+animatePart("#rightLeg",0.2,0); updateProgress(); },800); 
+
+} 
+
+else if(step===7){ 
+
+updateProgress(); 
 
 document.querySelector("#gundam") 
 
 .setAttribute("animation","property: rotation; to: 0 360 0; loop:true; dur:6000;"); 
+
+flashEffect(); 
 
 } 
 
@@ -246,7 +300,31 @@ document.querySelector("#gundam")
 
  
 
-function label(t){document.querySelector("#labelUI").innerText=t;} 
+function flashEffect(){ 
+
+const scene = document.querySelector("a-marker"); 
+
+const flash = document.createElement("a-box"); 
+
+flash.setAttribute("color","white"); 
+
+flash.setAttribute("opacity","0.8"); 
+
+flash.setAttribute("transparent","true"); 
+
+flash.setAttribute("position","0 1 0"); 
+
+flash.setAttribute("depth","2"); 
+
+flash.setAttribute("height","2"); 
+
+flash.setAttribute("width","2"); 
+
+scene.appendChild(flash); 
+
+setTimeout(()=>{ scene.removeChild(flash); },300); 
+
+} 
 
  
 
@@ -254,9 +332,11 @@ function resetModel(){
 
 step=0; 
 
-const parts=["#body","#waist","#head","#eye","#hornL","#hornR", 
+updateProgress(); 
 
-"#leftArm","#rightArm","#leftLeg","#rightLeg","#rifle","#shield"]; 
+const parts=["#body","#waist","#head","#eye", 
+
+"#leftArm","#rightArm","#leftLeg","#rightLeg"]; 
 
 parts.forEach(id=>{ 
 
@@ -272,9 +352,167 @@ p.setAttribute("position","0 3 0");
 
 document.querySelector("#gundam").removeAttribute("animation"); 
 
-label("組み立てスタート"); 
+hideGuide(); 
+
+document.querySelector("#labelUI").innerText="組み立てスタート"; 
 
 } 
+
+ 
+
+/* ===== タッチ操作 ===== */ 
+
+ 
+
+// 回転（上下左右） 
+
+let isDragging=false; 
+
+let previousX=0; 
+
+let previousY=0; 
+
+ 
+
+document.addEventListener("touchstart",(e)=>{ 
+
+if(e.touches.length===1){ 
+
+isDragging=true; 
+
+previousX=e.touches[0].clientX; 
+
+previousY=e.touches[0].clientY; 
+
+} 
+
+}); 
+
+ 
+
+document.addEventListener("touchmove",(e)=>{ 
+
+if(!isDragging||e.touches.length!==1)return; 
+
+ 
+
+let currentX=e.touches[0].clientX; 
+
+let currentY=e.touches[0].clientY; 
+
+ 
+
+let deltaX=currentX-previousX; 
+
+let deltaY=currentY-previousY; 
+
+ 
+
+previousX=currentX; 
+
+previousY=currentY; 
+
+ 
+
+const model=document.querySelector("#gundam"); 
+
+let rotation=model.getAttribute("rotation"); 
+
+ 
+
+let newX=rotation.x-deltaY*0.5; 
+
+let newY=rotation.y+deltaX*0.5; 
+
+ 
+
+newX=Math.min(Math.max(newX,-60),60); 
+
+ 
+
+model.setAttribute("rotation",{x:newX,y:newY,z:0}); 
+
+}); 
+
+ 
+
+document.addEventListener("touchend",()=>{ 
+
+isDragging=false; 
+
+}); 
+
+ 
+
+// ピンチズーム 
+
+let initialDistance=null; 
+
+let initialScale=1; 
+
+ 
+
+function getDistance(touches){ 
+
+const dx=touches[0].clientX-touches[1].clientX; 
+
+const dy=touches[0].clientY-touches[1].clientY; 
+
+return Math.sqrt(dx*dx+dy*dy); 
+
+} 
+
+ 
+
+document.addEventListener("touchstart",(e)=>{ 
+
+if(e.touches.length===2){ 
+
+initialDistance=getDistance(e.touches); 
+
+const model=document.querySelector("#gundam"); 
+
+initialScale=model.getAttribute("scale").x||1; 
+
+} 
+
+}); 
+
+ 
+
+document.addEventListener("touchmove",(e)=>{ 
+
+if(e.touches.length===2&&initialDistance){ 
+
+const currentDistance=getDistance(e.touches); 
+
+let scaleFactor=currentDistance/initialDistance; 
+
+ 
+
+const model=document.querySelector("#gundam"); 
+
+let newScale=initialScale*scaleFactor; 
+
+ 
+
+newScale=Math.min(Math.max(newScale,0.3),3); 
+
+ 
+
+model.setAttribute("scale",{x:newScale,y:newScale,z:newScale}); 
+
+} 
+
+}); 
+
+ 
+
+document.addEventListener("touchend",()=>{ 
+
+initialDistance=null; 
+
+}); 
 
 </script> 
 
@@ -283,9 +521,3 @@ label("組み立てスタート");
 </body> 
 
 </html> 
-
- 
-
- 
-
-https://chatgpt.com/share/699fa1fd-ab70-8010-ba6f-1bfaa6558404 
