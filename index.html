@@ -28,6 +28,16 @@ style="position:absolute; top:20px; left:20px; z-index:999; padding:10px;">
 
  
 
+<button onclick="resetModel()"  
+
+style="position:absolute; top:20px; left:140px; z-index:999; padding:10px;"> 
+
+リセット 
+
+</button> 
+
+ 
+
 <div id="labelUI" 
 
      style="position:absolute; 
@@ -189,6 +199,36 @@ function nextStep() {
     document.querySelector("#labelUI").innerText = "完成！"; 
 
   } 
+
+} 
+
+ 
+
+function resetModel() { 
+
+  step = 0; 
+
+ 
+
+  const parts = ["#body", "#waist", "#head"]; 
+
+ 
+
+  parts.forEach(id => { 
+
+    const part = document.querySelector(id); 
+
+    part.setAttribute("visible", false); 
+
+    part.removeAttribute("animation"); 
+
+    part.setAttribute("position", "0 3 0"); 
+
+  }); 
+
+ 
+
+  document.querySelector("#labelUI").innerText = "組み立てスタート"; 
 
 } 
 
