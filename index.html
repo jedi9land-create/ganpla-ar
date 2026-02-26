@@ -32,47 +32,49 @@ style="position:absolute; top:20px; left:20px; z-index:999; padding:10px;">
 
  
 
-    <!-- 頭 --> 
+    <!-- パーツ --> 
 
-    <a-box id="head" position="0 1.6 0"  
+    <a-box id="body" position="0 1 0" 
 
-           depth="0.4" height="0.4" width="0.4"  
-
-           color="white" visible="false"></a-box> 
-
- 
-
-    <!-- 体 --> 
-
-    <a-box id="body" position="0 1 0"  
-
-           depth="0.4" height="0.8" width="0.6"  
+           depth="0.4" height="0.8" width="0.6" 
 
            color="blue" visible="false"></a-box> 
 
  
 
-    <!-- 腰 --> 
+    <a-box id="waist" position="0 0.6 0" 
 
-    <a-box id="waist" position="0 0.6 0"  
-
-           depth="0.4" height="0.3" width="0.7"  
+           depth="0.4" height="0.3" width="0.7" 
 
            color="red" visible="false"></a-box> 
 
-<a-text id="label" 
+ 
 
-        value="" 
+    <a-box id="head" position="0 1.6 0" 
 
-        position="0 2.3 0" 
+           depth="0.4" height="0.4" width="0.4" 
 
-        align="center" 
+           color="white" visible="false"></a-box> 
 
-        color="yellow" 
+ 
 
-        visible="true"> 
+    <!-- ラベル --> 
 
-</a-text>  
+    <a-text id="label" 
+
+            value="" 
+
+            position="0 2 0" 
+
+            align="center" 
+
+            color="yellow" 
+
+            scale="2 2 2"> 
+
+    </a-text> 
+
+ 
 
   </a-marker> 
 
@@ -104,13 +106,17 @@ function nextStep() {
 
   } 
 
+ 
+
   if (step === 2) { 
 
     document.querySelector("#waist").setAttribute("visible", true); 
 
-    document.querySelector("#label").setAttribute("value", "Step2: 腰パーツ"); 
+    document.querySelector("#label").setAttribute("value", "Step2: 腰"); 
 
   } 
+
+ 
 
   if (step === 3) { 
 
@@ -128,5 +134,6 @@ function nextStep() {
 
 </body> 
 
-</html>
+</html> 
 
+ 
