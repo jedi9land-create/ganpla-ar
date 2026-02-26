@@ -42,7 +42,7 @@ style="position:absolute; top:60px; left:20px; z-index:999; padding:10px;">
 
      style="position:absolute; 
 
-            top:70px; 
+            top:110px; 
 
             left:20px; 
 
@@ -50,7 +50,7 @@ style="position:absolute; top:60px; left:20px; z-index:999; padding:10px;">
 
             color:white; 
 
-            font-size:20px; 
+            font-size:18px; 
 
             background:black; 
 
@@ -70,61 +70,71 @@ style="position:absolute; top:60px; left:20px; z-index:999; padding:10px;">
 
     <!-- 胴体 --> 
 
-    <a-box id="body" 
+    <a-box id="body" position="0 3 0" 
 
-           position="0 3 0" 
+           depth="0.4" height="0.8" width="0.6" 
 
-           depth="0.4" 
-
-           height="0.8" 
-
-           width="0.6" 
-
-           color="blue" 
-
-           visible="false"> 
-
-    </a-box> 
+           color="blue" visible="false"></a-box> 
 
  
 
     <!-- 腰 --> 
 
-    <a-box id="waist" 
+    <a-box id="waist" position="0 3 0" 
 
-           position="0 3 0" 
+           depth="0.4" height="0.3" width="0.7" 
 
-           depth="0.4" 
-
-           height="0.3" 
-
-           width="0.7" 
-
-           color="red" 
-
-           visible="false"> 
-
-    </a-box> 
+           color="red" visible="false"></a-box> 
 
  
 
     <!-- 頭 --> 
 
-    <a-box id="head" 
+    <a-box id="head" position="0 3 0" 
 
-           position="0 3 0" 
+           depth="0.4" height="0.4" width="0.4" 
 
-           depth="0.4" 
+           color="white" visible="false"></a-box> 
 
-           height="0.4" 
+ 
 
-           width="0.4" 
+    <!-- 左腕 --> 
 
-           color="white" 
+    <a-box id="leftArm" position="0 3 0" 
 
-           visible="false"> 
+           depth="0.3" height="0.7" width="0.3" 
 
-    </a-box> 
+           color="white" visible="false"></a-box> 
+
+ 
+
+    <!-- 右腕 --> 
+
+    <a-box id="rightArm" position="0 3 0" 
+
+           depth="0.3" height="0.7" width="0.3" 
+
+           color="white" visible="false"></a-box> 
+
+ 
+
+    <!-- 左脚 --> 
+
+    <a-box id="leftLeg" position="0 3 0" 
+
+           depth="0.3" height="1" width="0.3" 
+
+           color="gray" visible="false"></a-box> 
+
+ 
+
+    <!-- 右脚 --> 
+
+    <a-box id="rightLeg" position="0 3 0" 
+
+           depth="0.3" height="1" width="0.3" 
+
+           color="gray" visible="false"></a-box> 
 
  
 
@@ -144,7 +154,7 @@ let step = 0;
 
  
 
-function animatePart(id, finalY) { 
+function animatePart(id, x, y) { 
 
   const part = document.querySelector(id); 
 
@@ -152,7 +162,7 @@ function animatePart(id, finalY) {
 
   part.setAttribute("animation", 
 
-    "property: position; to: 0 " + finalY + " 0; dur: 1000; easing: easeOutQuad;"); 
+    "property: position; to: " + x + " " + y + " 0; dur: 800; easing: easeOutQuad;"); 
 
 } 
 
@@ -166,39 +176,73 @@ function nextStep() {
 
   if (step === 1) { 
 
-    animatePart("#body", 1); 
+    animatePart("#body", 0, 1); 
 
-    document.querySelector("#labelUI").innerText = "Step1: 胴体を取り付け"; 
+    label("Step1: 胴体"); 
 
   } 
-
- 
 
   else if (step === 2) { 
 
-    animatePart("#waist", 0.6); 
+    animatePart("#waist", 0, 0.6); 
 
-    document.querySelector("#labelUI").innerText = "Step2: 腰パーツを取り付け"; 
+    label("Step2: 腰"); 
 
   } 
-
- 
 
   else if (step === 3) { 
 
-    animatePart("#head", 1.6); 
+    animatePart("#head", 0, 1.6); 
 
-    document.querySelector("#labelUI").innerText = "Step3: 頭部を取り付け"; 
+    label("Step3: 頭部"); 
 
   } 
 
- 
+  else if (step === 4) { 
+
+    animatePart("#leftArm", -0.6, 1.1); 
+
+    label("Step4: 左腕"); 
+
+  } 
+
+  else if (step === 5) { 
+
+    animatePart("#rightArm", 0.6, 1.1); 
+
+    label("Step5: 右腕"); 
+
+  } 
+
+  else if (step === 6) { 
+
+    animatePart("#leftLeg", -0.2, 0); 
+
+    label("Step6: 左脚"); 
+
+  } 
+
+  else if (step === 7) { 
+
+    animatePart("#rightLeg", 0.2, 0); 
+
+    label("Step7: 右脚"); 
+
+  } 
 
   else { 
 
-    document.querySelector("#labelUI").innerText = "完成！"; 
+    label("完成！"); 
 
   } 
+
+} 
+
+ 
+
+function label(text) { 
+
+  document.querySelector("#labelUI").innerText = text; 
 
 } 
 
@@ -210,7 +254,7 @@ function resetModel() {
 
  
 
-  const parts = ["#body", "#waist", "#head"]; 
+  const parts = ["#body","#waist","#head","#leftArm","#rightArm","#leftLeg","#rightLeg"]; 
 
  
 
@@ -228,7 +272,7 @@ function resetModel() {
 
  
 
-  document.querySelector("#labelUI").innerText = "組み立てスタート"; 
+  label("組み立てスタート"); 
 
 } 
 
@@ -238,5 +282,4 @@ function resetModel() {
 
 </body> 
 
-</html> 
-
+</html>
