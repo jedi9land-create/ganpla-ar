@@ -4,6 +4,8 @@
 
 <head> 
 
+  <meta charset="utf-8"> 
+
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script> 
 
   <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script> 
@@ -12,9 +14,11 @@
 
  
 
-<body style="margin: 0; overflow: hidden;"> 
+<body style="margin:0; overflow:hidden; font-family:sans-serif;"> 
 
  
+
+<!-- ボタン --> 
 
 <button onclick="nextStep()"  
 
@@ -26,55 +30,97 @@ style="position:absolute; top:20px; left:20px; z-index:999; padding:10px;">
 
  
 
+<!-- ラベルUI（確実に表示される） --> 
+
+<div id="labelUI" 
+
+     style="position:absolute; 
+
+            top:70px; 
+
+            left:20px; 
+
+            z-index:999; 
+
+            color:white; 
+
+            font-size:20px; 
+
+            background:black; 
+
+            padding:10px;"> 
+
+組み立てスタート 
+
+</div> 
+
+ 
+
 <a-scene embedded arjs> 
 
   <a-marker preset="hiro"> 
 
  
 
-    <!-- パーツ --> 
+    <!-- 胴体 --> 
 
-    <a-box id="body" position="0 1 0" 
+    <a-box id="body" 
 
-           depth="0.4" height="0.8" width="0.6" 
+           position="0 1 0" 
 
-           color="blue" visible="false"></a-box> 
+           depth="0.4" 
 
- 
+           height="0.8" 
 
-    <a-box id="waist" position="0 0.6 0" 
+           width="0.6" 
 
-           depth="0.4" height="0.3" width="0.7" 
+           color="blue" 
 
-           color="red" visible="false"></a-box> 
+           visible="false"> 
 
- 
-
-    <a-box id="head" position="0 1.6 0" 
-
-           depth="0.4" height="0.4" width="0.4" 
-
-           color="white" visible="false"></a-box> 
+    </a-box> 
 
  
 
-    <!-- ラベル --> 
+    <!-- 腰 --> 
 
-   <a-text id="label" 
+    <a-box id="waist" 
 
-        value="" 
+           position="0 0.6 0" 
 
-        position="0 2 0" 
+           depth="0.4" 
 
-        rotation="-90 0 0" 
+           height="0.3" 
 
-        align="center" 
+           width="0.7" 
 
-        color="yellow" 
+           color="red" 
 
-        scale="4 4 4"> 
+           visible="false"> 
 
-</a-text> 
+    </a-box> 
+
+ 
+
+    <!-- 頭 --> 
+
+    <a-box id="head" 
+
+           position="0 1.6 0" 
+
+           depth="0.4" 
+
+           height="0.4" 
+
+           width="0.4" 
+
+           color="white" 
+
+           visible="false"> 
+
+    </a-box> 
+
+ 
 
   </a-marker> 
 
@@ -102,27 +148,35 @@ function nextStep() {
 
     document.querySelector("#body").setAttribute("visible", true); 
 
-    document.querySelector("#label").setAttribute("value", "Step1: 胴体"); 
+    document.querySelector("#labelUI").innerText = "Step1: 胴体を取り付け"; 
 
   } 
 
  
 
-  if (step === 2) { 
+  else if (step === 2) { 
 
     document.querySelector("#waist").setAttribute("visible", true); 
 
-    document.querySelector("#label").setAttribute("value", "Step2: 腰"); 
+    document.querySelector("#labelUI").innerText = "Step2: 腰パーツを取り付け"; 
 
   } 
 
  
 
-  if (step === 3) { 
+  else if (step === 3) { 
 
     document.querySelector("#head").setAttribute("visible", true); 
 
-    document.querySelector("#label").setAttribute("value", "Step3: 頭部"); 
+    document.querySelector("#labelUI").innerText = "Step3: 頭部を取り付け"; 
+
+  } 
+
+ 
+
+  else { 
+
+    document.querySelector("#labelUI").innerText = "完成！"; 
 
   } 
 
